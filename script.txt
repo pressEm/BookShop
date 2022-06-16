@@ -1,0 +1,77 @@
+--DROP TABLE IF EXISTS customers CASCADE;
+create table public.customers(
+	cust_id int primary key generated always as identity,
+	name character varying(50) not null,
+	email character varying(100) NOT NULL,
+	phone_num character varying(11)
+);
+
+create table public.books(
+	book_id int primary key generated always as identity,
+	name character varying(50) not null,
+	author character varying(50) not null,
+	category character varying(50),
+	rate int,
+	date_publish date,
+	publishing_house character varying(100) NOT NULL
+);
+
+create table public.shops(
+	shop_id int primary key generated always as identity,
+	name character varying(50) not null,
+	address character varying(50)
+);
+
+create table public.orders(
+	order_id int primary key generated always as identity,
+	cust_id int,
+	ord_date date,
+	shop_id int,
+	CONSTRAINT cust_id
+    FOREIGN KEY(cust_id)
+	REFERENCES customers(cust_id),
+	CONSTRAINT shop_id
+    FOREIGN KEY(shop_id)
+	REFERENCES shops(shop_id)
+);
+
+-- create table public.shops(
+-- 	shop_id int primary key generated always as identity,
+-- 	name character varying(50) not null,
+-- 	order_id int,
+-- 	CONSTRAINT order_id
+--     FOREIGN KEY(order_id)
+-- 	REFERENCES orders(order_id)
+-- );
+
+-- create table public.shops(
+-- 	shop_id int primary key generated always as identity,
+-- 	name character varying(50) not null,
+-- 	address character varying(50)
+-- );
+
+create table public.shop_book(
+	id int primary key generated always as identity,
+	shop_id int,
+	book_id int,
+	count int,
+	CONSTRAINT book_id
+    FOREIGN KEY(book_id)
+	REFERENCES books(book_id),
+	CONSTRAINT shop_id
+    FOREIGN KEY(shop_id)
+	REFERENCES shops(shop_id)
+);
+
+create table public.order_book(
+	id int primary key generated always as identity,
+	order_id int,
+	book_id int,
+	count int,
+	CONSTRAINT book_id
+    FOREIGN KEY(book_id)
+	REFERENCES books(book_id),
+	CONSTRAINT order_id
+    FOREIGN KEY(order_id)
+	REFERENCES orders(order_id)
+);
